@@ -1,9 +1,6 @@
 const mysql = require("mysql");
 const inquirer = require("inquirer");
 const cTable = require('console.table');
-const Employee = require("./lib/Employee")
-const Department = require("./lib/Department")
-const Role = require("./lib/Role")
 const Questions = require("./lib/Questions")
 const connection = mysql.createConnection({
     host: "localhost",
@@ -13,78 +10,105 @@ const connection = mysql.createConnection({
     password: "LK41m&kxVA6c8Mt@",
     database: "employee_db"
 });
-function update() {
-    getDepartments();
-    getRoles();
-    getEmployees();
-}
 async function init() {
-    var exit = true;
-    while(exit) {
-        const ans = await inquirer.prompt(Questions.choice);
-        switch(ans.choice) {
-            
-            case 1: 
-            console.table(employees);
+    const ans = await inquirer.prompt(Questions.choice);
+    switch(ans.choice) {
+        case 1: 
+            viewAll()
             break;
-            case 10:
-                exit = false;
-                break
-        };
-    }
-    connection.end();
+
+        case 2:
+            viewAllByDepartments()
+            break;
+
+        case 3:
+            viewAllByManagers()
+            break;
+
+        case 4:
+            addEmployee()
+            break;
+
+        case 5:
+            updateEmployeeRole()
+            break;
+
+        case 6:
+            updateEmployeeManager()
+            break;
+
+        case 7:
+            viewAllRoles()
+            break;
+        case 8:
+            addRole()
+            break;
+
+        case 9:
+            removeRole()
+            break;
+
+        case 10:
+            viewAllDepartments()
+            break;
+
+        case 11:
+            addDepartment()
+            break;
+
+        case 12:
+            removeDepartment()
+            break;
+
+        case 13:
+            viewTotalBudget()
+            break;
+
+        case 14:
+            connection.end();
+            break
+    };
 }
-const employees = [];
-const roles = [];
-const departments = [];
-async function getEmployees() {
+function viewAll() {
     connection.query('SELECT * FROM employee',(err,row)=> {
-        row.forEach((data) => {
-            employees.push(
-                new Employee(
-                data.id,
-                data.first_name,
-                data.last_name,
-                data.role_id,
-                data.manager_id,
-                roles
-                )
-            )
-        })
-        employees.forEach(employee=> {
-            employee.updateManager(employees);
-        })
-    });
-    return;
-}
-async function getRoles() {
-    connection.query('SELECT * FROM `role`',(err,row)=> {
-    row.forEach((data) => {
-        roles.push(
-            new Role(
-            data.id,
-            data.title,
-            data.salary,
-            data.department_id,
-            departments
-            )
-        )
+        console.table(row);
+        init()
     })
-    });
-    return;
 }
-async function getDepartments() {
-    connection.query('SELECT * FROM `department`',(err,row)=> {
-    row.forEach((data) => {
-        departments.push(
-            new Department(
-            data.id,
-            data.name
-            )
-        )
-        })
-    });
-    return;
+function viewAllByDepartments() {
+    
 }
-update()
-init();
+function viewAllByManagers() {
+    
+}
+function addEmployee() {
+    
+}
+function updateEmployeeRole() {
+    
+}
+function updateEmployeeManager() {
+    
+}
+function viewAllRoles() {
+    
+}
+function addRole() {
+    
+}
+function removeRole() {
+    
+}
+function viewAllDepartments() {
+    
+}
+function addDepartment() {
+    
+}
+function removeDepartment() {
+    
+}
+function viewTotalBudget() {
+    
+}
+init()
