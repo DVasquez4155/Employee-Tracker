@@ -114,20 +114,31 @@ function viewAllByManagers() {
     
 }
 function addEmployee() {
-    colToArray("role", ["id"], id => {
-        colToArray("role", ["title"], title => {
-            inquirer.prompt(Questions.add.employee(title,id)).then(ans => {
-                orm.create(["employee"],
-                ["first_name", "last_name", "role_id"],
-                [ans.first_name,ans.last_name,ans.role_id], () => {
-                    viewAll();
-                })
+    colToArray("role", ["id","title"], role => {
+        inquirer.prompt(Questions.add.employee(role)).then(ans => {
+            orm.create(["employee"],
+            ["first_name", "last_name", "role_id"],
+            [ans.first_name,ans.last_name,ans.role_id], () => {
+                viewAll();
             })
         })
     })
 }
 function updateEmployeeRole() {
-    
+    colToArray("employee", ["first_name", "last_name", "id"], employees => {
+        colToArray("role", ["title", "id"], roles => {
+            inquirer.prompt(Questions.update.role(employees,roles)).then(ans => {
+                orm.update(
+                    "employee", 
+                    {"role_id" : ans.role_id}, 
+                    "id = " + ans.id,
+                    () => {
+                        viewAll();
+                    }
+                )
+            })
+        })
+    })
 }
 function updateEmployeeManager() {
     
@@ -148,20 +159,18 @@ function viewEmployee(id) {
     })
 }
 function addRole() {
-    colToArray("department", ["id"], id => {
-        colToArray("department", ["name"], name => {
-            inquirer.prompt(Questions.add.role(name,id)).then(ans => {
-                orm.create(["role"],["title", "salary", "department_id"], [ans.title,ans.salary,ans.department_id], () => {
-                    viewAllRoles();
-                })
+    colToArray("department", ["id","name"], departments => {
+        inquirer.prompt(Questions.add.role(departments)).then(ans => {
+            orm.create(["role"],["title", "salary", "department_id"], [ans.title,ans.salary,ans.department_id], () => {
+                viewAllRoles();
             })
         })
     })
 }
 function removeRole() {
-    colToArray("role", ["title"], roles => {
+    colToArray("role", ["title","id"], roles => {
         inquirer.prompt(Questions.remove.role(roles)).then(ans => {
-            orm.delete("role", "title = '"+ ans.remove + "'", result => {
+            orm.delete("role", "id = '"+ ans.id + "'", result => {
                 viewAllRoles();
             })
         })
@@ -184,7 +193,12 @@ function colToArray(col, cols, cb) {
     orm.select(col, cols, result => {
         const array = [];
         result.forEach(row => {
-            array.push(row[Object.keys(row)]);
+            const keys = Object.keys(row);
+            const innerObject = [];
+            keys.forEach(key => {
+                innerObject[key] = row[key]
+            })
+            array.push(innerObject);
         })
         cb(array)
     })
