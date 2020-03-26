@@ -141,7 +141,20 @@ function updateEmployeeRole() {
     })
 }
 function updateEmployeeManager() {
-    
+    colToArray("employee", ["first_name", "last_name", "id"], employees => {
+        colToArray("employee", ["first_name", "last_name", "id"], managers => {
+            inquirer.prompt(Questions.update.employeeManager(employees,managers)).then(ans => {
+                orm.update(
+                    "employee", 
+                    {"manager_id" : ans.manager_id}, 
+                    "id = " + ans.id,
+                    () => {
+                        viewAll();
+                    }
+                )
+            })
+        })
+    })
 }
 function viewAllRoles() {
     var query = "SELECT `role`.id,`role`.title,`role`.salary, department.name as department FROM `role`";
