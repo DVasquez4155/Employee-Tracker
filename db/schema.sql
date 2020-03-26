@@ -39,17 +39,10 @@ INSERT INTO `role` (title, salary, department_id) values ('Lawyer', 19000, 4);
 -- SELECT title, `name`, salary
 -- FROM `role`
 -- LEFT JOIN department ON `role`.department_id = department.id;
-INSERT INTO employee (first_name, last_name, role_id, manager_id) values ('John', "Doe", 1, 3);
-INSERT INTO employee (first_name, last_name, role_id, manager_id) values ('Mike', "Chan", 2, 1);
-INSERT INTO employee (first_name, last_name, role_id) values ('Ashley', "Rodriguez", 3);
-INSERT INTO employee (first_name, last_name, role_id, manager_id) values ('Kevin', "Tupik", 4,3);
-INSERT INTO employee (first_name, last_name, role_id) values ('Malia', "Brown", 5);
-INSERT INTO employee (first_name, last_name, role_id) values ('Sarah', "Lourd", 6);
-INSERT INTO employee (first_name, last_name, role_id, manager_id) values ('Tom', "Allen", 7, 6);
-INSERT INTO employee (first_name, last_name, role_id, manager_id) values ('Christian', "Echenrode", 3, 2);
+
 -- SELECT * FROM employee;
 
-SELECT first_name, last_name, title, manager_id
-FROM employee
-LEFT JOIN `role` ON employee.role_id = `role`.id
-INNER JOIN `role` ON employee.manager_id = first_name;
+-- SELECT first_name, last_name, title, manager_id
+-- FROM employee
+-- LEFT JOIN `role` ON employee.role_id = `role`.id
+-- INNER JOIN `role` ON employee.manager_id = first_name;
