@@ -108,34 +108,29 @@ function viewAll() {
     })
 }
 function viewAllByDepartments() {
+
 }
 function viewAllByManagers() {
-    var query = "";
-    connection.query(query,(err,result)=> {
-        console.table(result);
-        init()
-    })
+    
 }
 function addEmployee() {
-    var query = "";
-    connection.query(query,(err,result)=> {
-        console.table(result);
-        init()
+    colToArray("role", ["id"], id => {
+        colToArray("role", ["title"], title => {
+            inquirer.prompt(Questions.add.employee(title,id)).then(ans => {
+                orm.create(["employee"],
+                ["first_name", "last_name", "role_id"],
+                [ans.first_name,ans.last_name,ans.role_id], () => {
+                    viewAll();
+                })
+            })
+        })
     })
 }
 function updateEmployeeRole() {
-    var query = "";
-    connection.query(query,(err,result)=> {
-        console.table(result);
-        init()
-    })
+    
 }
 function updateEmployeeManager() {
-    var query = "";
-    connection.query(query,(err,result)=> {
-        console.table(result);
-        init()
-    })
+    
 }
 function viewAllRoles() {
     var query = "SELECT `role`.id,`role`.title,`role`.salary, department.name as department FROM `role`";
@@ -160,7 +155,7 @@ function addRole() {
                     viewAllRoles();
                 })
             })
-    }   )
+        })
     })
 }
 function removeRole() {
@@ -215,11 +210,6 @@ function removeEmployee() {
     })
 }
 function viewTotalBudget() {
-    var query = "";
-    connection.query(query,(err,result)=> {
-        console.table(result);
-        init()
-    })
     
 }
 init()
