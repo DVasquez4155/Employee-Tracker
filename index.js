@@ -93,8 +93,8 @@ async function init() {
                 })
                 break
             case 5:
-                connection.end();
-                break
+                orm.connection.end();
+                return;
         };
     });
 }
@@ -182,15 +182,29 @@ function viewAllDepartments() {
     })
 }
 function addDepartment() {
-    inquirer.prompt({})
+    inquirer.prompt(Questions.add.department).then(ans => {
+        orm.create("department",["name"], [ans.name], () => {
+            viewAllDepartments();
+        })
+    })
+}
+function colToArray(col, cols, cb) {
+    orm.select(col, cols, result => {
+        const array = [];
+        result.forEach(row => {
+            array.push(row[Object.keys(row)]);
+        })
+        cb(array)
+    })
 }
 function removeDepartment() {
-    var query = "";
-    connection.query(query,(err,result)=> {
-        console.table(result);
-        init()
+    colToArray("department", ["name"], departments => {
+        inquirer.prompt(Questions.remove.department(departments)).then(ans => {
+            orm.delete("department", "name = '"+ ans.remove + "'", result => {
+                viewAllDepartments();
+            })
+        })
     })
-    
 }
 function removeEmployee() {
     var query = "";
