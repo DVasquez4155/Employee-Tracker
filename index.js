@@ -114,12 +114,14 @@ function viewAllByManagers() {
     
 }
 function addEmployee() {
-    colToArray("role", ["id","title"], role => {
-        inquirer.prompt(Questions.add.employee(role)).then(ans => {
-            orm.create(["employee"],
-            ["first_name", "last_name", "role_id"],
-            [ans.first_name,ans.last_name,ans.role_id], () => {
-                viewAll();
+    colToArray("role", ["id","title"], roles => {
+        colToArray("employee", ["first_name", "last_name", "id"], managers => {
+            inquirer.prompt(Questions.add.employee(roles,managers)).then(ans => {
+                orm.create(["employee"],
+                ["first_name", "last_name", "role_id", "manager_id"],
+                [ans.first_name,ans.last_name,ans.role_id, ans.manager_id], () => {
+                    viewAll();
+                })
             })
         })
     })
