@@ -127,7 +127,7 @@ function addEmployee() {
 function updateEmployeeRole() {
     colToArray("employee", ["first_name", "last_name", "id"], employees => {
         colToArray("role", ["title", "id"], roles => {
-            inquirer.prompt(Questions.update.role(employees,roles)).then(ans => {
+            inquirer.prompt(Questions.update.employeeRole(employees,roles)).then(ans => {
                 orm.update(
                     "employee", 
                     {"role_id" : ans.role_id}, 
