@@ -108,7 +108,7 @@ function viewAll() {
                 else {
                     row.manager = "";
                 }
-                if (row.id == result.length) {
+                if (row.id == result[result.length - 1].id) {
                     console.table(result)
                     init();
                 }
