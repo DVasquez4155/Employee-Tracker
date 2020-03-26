@@ -101,10 +101,19 @@ function viewAll() {
     left join department on \`role\`.department_id = department.id`;
     orm.connection.query(query,(err,result)=> {
         result.forEach((row => {
-            console.log(row.manager)
+            viewEmployee(row.manager, res => {
+                if (res[0] != undefined) {
+                    row.manager = res[0].first_name + " " + res[0].last_name
+                }
+                else {
+                    row.manager = "";
+                }
+                if (row.id == result.length) {
+                    console.table(result)
+                    init();
+                }
+            })
         }))
-        console.table(result);
-        init()
     })
 }
 function viewAllByDepartments() {
@@ -166,11 +175,10 @@ function viewAllRoles() {
         init()
     })
 }
-function viewEmployee(id) {
+function viewEmployee(id, cb) {
     var query = `SELECT * from employee where employee.id = ${id}`;
-    connection.query(query,(err,result)=> {
-        console.table(result);
-        init()
+    orm.connection.query(query,(err,result)=> {
+        cb(result)
     })
 }
 function addRole() {
