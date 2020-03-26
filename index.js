@@ -213,12 +213,10 @@ function removeDepartment() {
     })
 }
 function removeEmployee() {
-    colToArray("employee", ["id"], id => {
-        colToArray("employee", ["first_name"], first_name => {
-            inquirer.prompt(Questions.remove.employee(id, first_name)).then(ans => {
-                orm.delete("employee", "id = "+ ans.remove + "", result => {
-                    viewAllRoles();
-                })
+    colToArray("employee", ["id", "first_name", "last_name"], employees => {
+        inquirer.prompt(Questions.remove.employee(employees)).then(ans => {
+            orm.delete("employee", "id = "+ ans.id + "", result => {
+                viewAll();
             })
         })
     })
