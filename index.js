@@ -1,16 +1,7 @@
-const mysql = require("mysql");
 const inquirer = require("inquirer");
 const cTable = require('console.table');
 const orm = require('./config/orm');
 const Questions = require("./lib/Questions")
-// const connection = mysql.createConnection({
-//     host: "localhost",
-//     // Your username
-//     user: "root",
-//     // Your password
-//     password: "LK41m&kxVA6c8Mt@",
-//     database: "employee_db"
-// });
 async function init() {
     inquirer.prompt(Questions.main).then(ans => {
         switch(ans.main) {
@@ -213,12 +204,15 @@ function removeDepartment() {
     })
 }
 function removeEmployee() {
-    var query = "";
-    connection.query(query,(err,result)=> {
-        console.table(result);
-        init()
+    colToArray("employee", ["id"], id => {
+        colToArray("employee", ["first_name"], first_name => {
+            inquirer.prompt(Questions.remove.employee(id, first_name)).then(ans => {
+                orm.delete("employee", "id = "+ ans.remove + "", result => {
+                    viewAllRoles();
+                })
+            })
+        })
     })
-
 }
 function viewTotalBudget() {
     var query = "";
@@ -227,8 +221,5 @@ function viewTotalBudget() {
         init()
     })
     
-}
-function add() {
-
 }
 init()
