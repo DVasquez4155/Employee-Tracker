@@ -162,17 +162,23 @@ function viewEmployee(id) {
     })
 }
 function addRole() {
-    var query = "";
-    connection.query(query,(err,result)=> {
-        console.table(result);
-        init()
+    colToArray("department", ["id"], id => {
+        colToArray("department", ["name"], name => {
+            inquirer.prompt(Questions.add.role(name,id)).then(ans => {
+                orm.create(["role"],["title", "salary", "department_id"], [ans.title,ans.salary,ans.department_id], () => {
+                    viewAllRoles();
+                })
+            })
+    }   )
     })
 }
 function removeRole() {
-    var query = "";
-    connection.query(query,(err,result)=> {
-        console.table(result);
-        init()
+    colToArray("role", ["title"], roles => {
+        inquirer.prompt(Questions.remove.role(roles)).then(ans => {
+            orm.delete("role", "title = '"+ ans.remove + "'", result => {
+                viewAllRoles();
+            })
+        })
     })
 }
 function viewAllDepartments() {
