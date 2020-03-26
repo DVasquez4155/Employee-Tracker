@@ -204,9 +204,9 @@ function colToArray(col, cols, cb) {
     })
 }
 function removeDepartment() {
-    colToArray("department", ["name"], departments => {
+    colToArray("department", ["name", "id"], departments => {
         inquirer.prompt(Questions.remove.department(departments)).then(ans => {
-            orm.delete("department", "name = '"+ ans.remove + "'", result => {
+            orm.delete("department", "id = '"+ ans.id + "'", result => {
                 viewAllDepartments();
             })
         })
